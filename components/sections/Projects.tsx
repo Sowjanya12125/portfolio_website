@@ -100,6 +100,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
 
   // Progress bar across the row
   const progressX = useSpring(0, { damping: 30, stiffness: 200 });
+  const progressWidth = useTransform(progressX, (v) => `${v}%`);
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!rowRef.current) return;
@@ -129,7 +130,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
       {/* Hover progress bar at top of row */}
       <motion.div
         className="absolute left-0 top-0 z-30 h-px bg-accent"
-        style={{ width: useTransform(progressX, (v) => `${v}%`) }}
+        style={{ width: progressWidth }}
       />
 
       {/* Hover preview image — follows cursor with parallax tilt */}

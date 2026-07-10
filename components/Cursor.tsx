@@ -41,19 +41,24 @@ export default function Cursor() {
   return (
     <motion.div
       className="pointer-events-none fixed left-0 top-0 z-[9999] hidden md:block"
-      style={{ x, y }}
+      style={{
+        x,
+        y,
+        mixBlendMode: isPointer ? 'normal' : 'difference',
+      }}
       animate={{
         opacity: hidden ? 0 : 1,
         scale: isPointer ? 3 : 1,
-        backgroundColor: isPointer ? 'rgba(224, 122, 95, 0)' : 'rgba(245, 242, 237, 1)',
-        borderColor: isPointer ? 'rgba(224, 122, 95, 1)' : 'rgba(245, 242, 237, 0)',
-        mixBlendMode: isPointer ? 'normal' : 'difference',
       }}
       transition={{ type: 'spring', damping: 25, stiffness: 300 }}
     >
-      <div
+      <motion.div
         className="h-4 w-4 rounded-full border"
-        style={{ borderColor: 'inherit' }}
+        animate={{
+          backgroundColor: isPointer ? 'rgba(224, 122, 95, 0)' : 'rgba(245, 242, 237, 1)',
+          borderColor: isPointer ? 'rgba(224, 122, 95, 1)' : 'rgba(245, 242, 237, 0)',
+        }}
+        transition={{ type: 'spring', damping: 25, stiffness: 300 }}
       />
     </motion.div>
   );

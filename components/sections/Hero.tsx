@@ -2,7 +2,7 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { ArrowDown } from 'lucide-react';
+import { ArrowDown, FileDown } from 'lucide-react';
 import MagneticButton from '@/components/MagneticButton';
 import { fadeUp, staggerContainer } from '@/lib/motion';
 
@@ -120,6 +120,14 @@ export default function Hero() {
               className="inline-flex items-center gap-2 rounded-full border border-ink-600 px-7 py-3.5 text-sm font-medium text-cream-200 transition-colors hover:border-accent hover:text-accent"
             >
               Get in touch
+            </MagneticButton>
+
+            <MagneticButton
+              href="/Sowjanya_Resume_infosys.pdf"
+              className="group inline-flex items-center gap-2 rounded-full border border-ink-600 px-7 py-3.5 text-sm font-medium text-cream-200 transition-colors hover:border-accent hover:text-accent"
+            >
+              <FileDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+              Download Resume
             </MagneticButton>
           </motion.div>
         </motion.div>

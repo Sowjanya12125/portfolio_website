@@ -1,8 +1,8 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { ArrowUpRight } from 'lucide-react';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
 interface Project {
@@ -81,6 +81,8 @@ const projects: Project[] = [
   },
 ];
 
+const categories = ['All', 'AI/ML', 'Full Stack', 'Research', 'Cybersecurity'];
+
 function ProjectRow({ project, index }: { project: Project; index: number }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
@@ -92,6 +94,13 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
   const x = useSpring(mouseX, springConfig);
   const y = useSpring(mouseY, springConfig);
 
+  // Parallax tilt for the image
+  const rotateX = useTransform(y, [0, 400], [5, -5]);
+  const rotateY = useTransform(x, [0, 1000], [-5, 5]);
+
+  // Progress bar across the row
+  const progressX = useSpring(0, { damping: 30, stiffness: 200 });
+
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!rowRef.current) return;
     const rect = rowRef.current.getBoundingClientRect();
@@ -99,6 +108,12 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
     const relY = e.clientY - rect.top;
     mouseX.set(relX);
     mouseY.set(relY);
+    progressX.set((relX / rect.width) * 100);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+    progressX.set(0);
   };
 
   return (
@@ -106,52 +121,71 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
       variants={fadeUp}
       ref={rowRef}
       onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => setIsHovered(false)}
+      onMouseLeave={handleMouseLeave}
       onMouseMove={handleMouseMove}
       className="group relative border-b border-ink-700"
       data-cursor="pointer"
     >
-      {/* Hover preview image */}
+      {/* Hover progress bar at top of row */}
+      <motion.div
+        className="absolute left-0 top-0 z-30 h-px bg-accent"
+        style={{ width: useTransform(progressX, (v) => `${v}%`) }}
+      />
+
+      {/* Hover preview image — follows cursor with parallax tilt */}
       {isHovered && (
         <motion.div
-          className="pointer-events-none absolute z-20 hidden h-[280px] w-[400px] overflow-hidden rounded-lg md:block"
+          className="pointer-events-none absolute z-20 hidden h-[280px] w-[400px] overflow-hidden rounded-xl md:block"
           style={{
             x,
             y,
             translateX: '-50%',
             translateY: '-50%',
+            rotateX,
+            rotateY,
+            transformPerspective: 1000,
           }}
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.95 }}
-          transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          exit={{ opacity: 0, scale: 0.9 }}
+          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
         >
           <img
             src={project.image}
             alt={project.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/60 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 to-transparent" />
+          {project.featured && (
+            <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-950">
+              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-950" />
+              Featured
+            </div>
+          )}
         </motion.div>
       )}
 
-      <a
-        href={project.githubUrl || '#'}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="relative block py-10 md:py-14"
-      >
+      <div className="relative block py-10 md:py-14">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 md:px-12">
           {/* Left: index + title */}
           <div className="flex items-baseline gap-6 md:gap-12">
-            <span className="text-sm font-medium text-cream-600 tabular-nums">
+            {/* Animated index number */}
+            <motion.span
+              className="text-sm font-medium tabular-nums"
+              animate={{
+                color: isHovered ? '#e07a5f' : '#7a746a',
+                scale: isHovered ? 1.15 : 1,
+              }}
+              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            >
               {String(index + 1).padStart(2, '0')}
-            </span>
+            </motion.span>
+
             <div>
-              <h3 className="text-display text-2xl text-cream-200 transition-colors duration-300 group-hover:text-accent md:text-4xl lg:text-5xl">
+              <h3 className="text-display text-2xl text-cream-200 transition-all duration-300 group-hover:translate-x-2 group-hover:text-accent md:text-4xl lg:text-5xl">
                 {project.title}
               </h3>
-              <p className="mt-2 max-w-xl text-sm text-cream-500 md:text-base">
+              <p className="mt-2 max-w-xl text-sm text-cream-500 transition-opacity duration-300 group-hover:text-cream-400 md:text-base">
                 {project.description}
               </p>
               {/* Tech tags */}
@@ -159,12 +193,45 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
                 {project.technologies.map((tech) => (
                   <span
                     key={tech}
-                    className="rounded-full border border-ink-600 px-3 py-1 text-xs text-cream-500"
+                    className="rounded-full border border-ink-600 px-3 py-1 text-xs text-cream-500 transition-colors duration-300 group-hover:border-ink-500 group-hover:text-cream-400"
                   >
                     {tech}
                   </span>
                 ))}
               </div>
+
+              {/* Action links — appear on hover */}
+              <motion.div
+                className="mt-5 flex items-center gap-4 overflow-hidden"
+                animate={{
+                  opacity: isHovered ? 1 : 0,
+                  height: isHovered ? 'auto' : 0,
+                }}
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              >
+                {project.githubUrl && (
+                  <a
+                    href={project.githubUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-cream-400 transition-colors hover:text-accent"
+                  >
+                    <Github className="h-3.5 w-3.5" />
+                    Source
+                  </a>
+                )}
+                {project.liveUrl && (
+                  <a
+                    href={project.liveUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 text-xs font-medium text-cream-400 transition-colors hover:text-accent"
+                  >
+                    <ExternalLink className="h-3.5 w-3.5" />
+                    Live Demo
+                  </a>
+                )}
+              </motion.div>
             </div>
           </div>
 
@@ -172,7 +239,10 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
           <div className="flex flex-shrink-0 flex-col items-end gap-3">
             <span className="text-eyebrow">{project.category}</span>
             <motion.div
-              animate={{ rotate: isHovered ? 45 : 0, scale: isHovered ? 1.2 : 1 }}
+              animate={{
+                rotate: isHovered ? 45 : 0,
+                scale: isHovered ? 1.2 : 1,
+              }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="flex h-12 w-12 items-center justify-center rounded-full border border-ink-600 text-cream-400 transition-colors group-hover:border-accent group-hover:text-accent"
             >
@@ -185,12 +255,19 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         <motion.div
           className="absolute inset-0 bg-ink-900 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         />
-      </a>
+      </div>
     </motion.div>
   );
 }
 
 export default function Projects() {
+  const [activeCategory, setActiveCategory] = useState('All');
+
+  const filteredProjects =
+    activeCategory === 'All'
+      ? projects
+      : projects.filter((p) => p.category === activeCategory);
+
   return (
     <section id="projects" className="relative bg-ink-950">
       {/* Section header */}
@@ -217,18 +294,42 @@ export default function Projects() {
           A selection of work spanning AI, full-stack engineering, and
           security research.
         </motion.p>
+
+        {/* Category filters */}
+        <motion.div
+          variants={fadeUp}
+          className="mt-10 flex flex-wrap gap-2"
+        >
+          {categories.map((category) => (
+            <button
+              key={category}
+              onClick={() => setActiveCategory(category)}
+              className={`relative rounded-full border px-4 py-2 text-sm font-medium transition-all duration-300 ${
+                activeCategory === category
+                  ? 'border-accent text-accent'
+                  : 'border-ink-600 text-cream-500 hover:border-cream-600 hover:text-cream-200'
+              }`}
+            >
+              {category}
+              {activeCategory === category && (
+                <motion.span
+                  layoutId="activeFilter"
+                  className="absolute inset-0 -z-10 rounded-full bg-accent/10"
+                  transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                />
+              )}
+            </button>
+          ))}
+        </motion.div>
       </motion.div>
 
       {/* Project rows */}
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="visible"
-        viewport={viewportOnce}
-      >
-        {projects.map((project, index) => (
-          <ProjectRow key={project.id} project={project} index={index} />
-        ))}
+      <motion.div layout>
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project, index) => (
+            <ProjectRow key={project.id} project={project} index={index} />
+          ))}
+        </AnimatePresence>
       </motion.div>
 
       {/* Footer link */}

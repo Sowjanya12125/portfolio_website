@@ -53,7 +53,7 @@ export default function Footer() {
 
         <motion.h2
           variants={fadeUp}
-          className="text-display text-[clamp(3rem,12vw,9rem)] leading-[0.9] text-cream-100"
+          className="text-display text-[clamp(2rem,7vw,5.5rem)] leading-[0.9] text-cream-100"
         >
           Let&apos;s talk<span className="text-accent">.</span>
         </motion.h2>

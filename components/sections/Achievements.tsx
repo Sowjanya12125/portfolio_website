@@ -14,31 +14,31 @@ interface Achievement {
 
 const achievements: Achievement[] = [
   {
-    title: 'ISRO Hackathon Winner',
-    organization: 'Indian Space Research Organisation',
-    year: '2024',
-    description: 'Led team to victory in national-level space technology hackathon',
+    title: 'ISRO Bharatiya Antariksh Hackathon — Round 2',
+    organization: 'Indian Space Research Organisation (National)',
+    year: 'Jul 2025',
+    description: 'Advanced among hundreds of nationwide teams; built high-complexity data processing algorithms for large-scale satellite and aerospace datasets, presented to ISRO evaluators.',
     type: 'hackathon',
   },
   {
-    title: 'Research Internship',
-    organization: 'ML Research Laboratory',
-    year: '2025',
-    description: 'Conducted research on Bayesian uncertainty quantification in deep learning',
+    title: 'Research Intern — Security & Risk Analytics',
+    organization: 'India Post, CEPT, Hyderabad',
+    year: 'Jul 2025',
+    description: 'End-to-end security posture assessment on enterprise networked systems; authored technical brief on probabilistic risk models formally adopted by the team.',
     type: 'research',
   },
   {
     title: 'Cisco Networking Essentials',
     organization: 'Cisco',
-    year: '2024',
-    description: 'Professional certification in networking fundamentals',
+    year: 'Dec 2025',
+    description: 'Professional certification in networking fundamentals and infrastructure.',
     type: 'certification',
   },
   {
     title: 'Ethereum & Solidity',
     organization: 'Blockchain Academy',
-    year: '2024',
-    description: 'Certified in smart contract development and blockchain technology',
+    year: 'Oct 2025',
+    description: 'Certified in smart contract development and blockchain technology.',
     type: 'certification',
   },
   {

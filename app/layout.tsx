@@ -1,6 +1,8 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import { MotionConfig } from 'framer-motion';
+import Cursor from '@/components/Cursor';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -79,7 +81,10 @@ export default function RootLayout({
       <body
         className={`${inter.variable} ${spaceGrotesk.variable} font-sans antialiased`}
       >
-        {children}
+        <MotionConfig reducedMotion="user">
+          <Cursor />
+          {children}
+        </MotionConfig>
       </body>
     </html>
   );

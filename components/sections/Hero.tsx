@@ -1,8 +1,10 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { ChevronDown, FileText, Github, Linkedin, Mail } from 'lucide-react';
+import { useRef } from 'react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { ArrowDown } from 'lucide-react';
+import MagneticButton from '@/components/MagneticButton';
+import { fadeUp, staggerContainer } from '@/lib/motion';
 
 const roles = [
   'AI Developer',
@@ -11,58 +13,16 @@ const roles = [
   'Cybersecurity Enthusiast',
 ];
 
-const floatingTechIcons = [
-  { name: 'Python', delay: 0 },
-  { name: 'React', delay: 0.5 },
-  { name: 'TensorFlow', delay: 1 },
-  { name: 'Node.js', delay: 1.5 },
-  { name: 'TypeScript', delay: 2 },
-  { name: 'PyTorch', delay: 2.5 },
-];
-
 export default function Hero() {
-  const [displayedText, setDisplayedText] = useState('');
-  const [roleIndex, setRoleIndex] = useState(0);
-  const [isDeleting, setIsDeleting] = useState(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start start', 'end start'],
+  });
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 150 };
-  const cardRotateX = useSpring(useTransform(mouseY, [-300, 300], [10, -10]), springConfig);
-  const cardRotateY = useSpring(useTransform(mouseX, [-300, 300], [-10, 10]), springConfig);
-
-  useEffect(() => {
-    const currentRole = roles[roleIndex];
-    const timeout = setTimeout(() => {
-      if (!isDeleting) {
-        if (displayedText.length < currentRole.length) {
-          setDisplayedText(currentRole.slice(0, displayedText.length + 1));
-        } else {
-          setTimeout(() => setIsDeleting(true), 2000);
-        }
-      } else {
-        if (displayedText.length > 0) {
-          setDisplayedText(displayedText.slice(0, -1));
-        } else {
-          setIsDeleting(false);
-          setRoleIndex((prev) => (prev + 1) % roles.length);
-        }
-      }
-    }, isDeleting ? 50 : 100);
-
-    return () => clearTimeout(timeout);
-  }, [displayedText, isDeleting, roleIndex]);
-
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    mouseX.set(e.clientX - centerX);
-    mouseY.set(e.clientY - centerY);
-  };
+  const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
 
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -74,271 +34,114 @@ export default function Hero() {
 
   return (
     <section
+      ref={ref}
       id="home"
-      className="relative min-h-screen overflow-hidden bg-base-950"
-      onMouseMove={handleMouseMove}
-      ref={containerRef}
+      className="relative min-h-screen overflow-hidden bg-ink-950"
     >
-      {/* Background Elements */}
-      <div className="absolute inset-0">
-        {/* Gradient Orbs */}
-        <div className="absolute left-1/4 top-1/4 h-96 w-96 rounded-full bg-teal-500/5 blur-3xl" />
-        <div className="absolute right-1/4 top-1/2 h-96 w-96 rounded-full bg-emerald-500/5 blur-3xl" />
-        <div className="absolute bottom-1/4 left-1/2 h-64 w-64 rounded-full bg-cyan-500/3 blur-3xl" />
+      {/* Subtle grain overlay */}
+      <div
+        className="absolute inset-0 opacity-[0.03] pointer-events-none"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' /%3E%3C/svg%3E")`,
+        }}
+      />
 
-        {/* Grid Pattern */}
-        <div
-          className="absolute inset-0 opacity-15"
-          style={{
-            backgroundImage: `linear-gradient(rgba(45, 212, 191, 0.02) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(45, 212, 191, 0.02) 1px, transparent 1px)`,
-            backgroundSize: '100px 100px',
-          }}
-        />
+      {/* Faint accent glow */}
+      <div className="absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-accent/[0.04] blur-[120px] pointer-events-none" />
 
-        {/* Floating Particles */}
-        {[...Array(30)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute h-1 w-1 rounded-full bg-teal-400/20"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-            }}
-            animate={{
-              y: [0, -30, 0],
-              opacity: [0.2, 0.6, 0.2],
-            }}
-            transition={{
-              duration: 4 + Math.random() * 4,
-              repeat: Infinity,
-              delay: Math.random() * 2,
-            }}
-          />
-        ))}
-      </div>
-
-      {/* Content */}
-      <div className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col items-center justify-center px-4 sm:px-6 lg:px-8">
-        <div className="grid w-full items-center gap-12 lg:grid-cols-2 lg:gap-20">
-          {/* Left Side - Text Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, ease: 'easeOut' }}
-            className="text-center lg:text-left"
+      <motion.div
+        style={{ y, opacity, scale }}
+        className="relative z-10 mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-6 pt-32 pb-20 md:px-12"
+      >
+        {/* Eyebrow */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          animate="visible"
+        >
+          <motion.p
+            variants={fadeUp}
+            className="text-eyebrow mb-8"
           >
-            {/* Greeting */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
-              className="mb-4 text-lg text-slate-400"
-            >
-              Hi there, I'm
-            </motion.p>
+            <span className="mr-3 inline-block h-2 w-2 animate-pulse rounded-full bg-accent align-middle" />
+            Available for opportunities — 2026
+          </motion.p>
 
-            {/* Name */}
-            <motion.h1
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-              className="mb-6 font-display text-4xl font-bold leading-tight text-white sm:text-5xl md:text-6xl lg:text-7xl"
-            >
-              <span className="block">Sowjanya SK</span>
-              <span className="block bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">Susarla</span>
-            </motion.h1>
+          {/* Name — oversized display type */}
+          <motion.h1
+            variants={fadeUp}
+            className="text-display text-[clamp(3rem,11vw,9rem)] leading-[0.9] text-cream-100"
+          >
+            <span className="block">Sowjanya</span>
+            <span className="block">
+              SK Susarla
+              <span className="text-accent">.</span>
+            </span>
+          </motion.h1>
 
-            {/* Role Typing Effect */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="mb-8 flex min-h-[2rem] items-center justify-center text-xl text-slate-300 sm:text-2xl lg:justify-start"
-            >
-              <span className="text-teal-400">Computer Science Engineer</span>
-              <span className="ml-2 text-slate-600">|</span>
-              <span className="ml-3">
-                <span className="text-white">{displayedText}</span>
-                <span className="ml-0.5 inline-block h-6 w-0.5 animate-pulse bg-teal-400" />
-              </span>
-            </motion.div>
-
-            {/* Description */}
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6 }}
-              className="mb-10 max-w-lg text-lg text-slate-400 sm:text-xl"
-            >
-              Building intelligent systems at the intersection of AI, security, and scalable software engineering.
-            </motion.p>
-
-            {/* CTA Buttons */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 }}
-              className="flex flex-wrap items-center justify-center gap-4 lg:justify-start"
-            >
-              <motion.button
-                onClick={scrollToProjects}
-                className="btn-primary flex items-center gap-2 text-sm sm:text-base"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                View Projects
-                <ChevronDown className="h-4 w-4" />
-              </motion.button>
-
-              <motion.button
-                onClick={scrollToContact}
-                className="btn-secondary flex items-center gap-2 text-sm sm:text-base"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Contact Me
-                <Mail className="h-4 w-4" />
-              </motion.button>
-
-              <motion.a
-                href="mailto:kameshwarisowjanya@gmail.com?subject=Resume Request&body=Hi, I would like to request your resume."
-                className="btn-secondary flex items-center gap-2 text-sm sm:text-base"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Request Resume
-                <FileText className="h-4 w-4" />
-              </motion.a>
-            </motion.div>
-
-            {/* Social Links */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.9 }}
-              className="mt-10 flex items-center justify-center gap-6 lg:justify-start"
-            >
-              <motion.a
-                href="https://github.com/Sowjanya12125"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-slate-700 bg-slate-800/50 p-3 text-slate-400 transition-all hover:border-teal-500/50 hover:text-teal-400"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Github className="h-5 w-5" />
-              </motion.a>
-              <motion.a
-                href="https://www.linkedin.com/in/sowjanya-s-k-susarla-498632308"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="rounded-full border border-slate-700 bg-slate-800/50 p-3 text-slate-400 transition-all hover:border-teal-500/50 hover:text-teal-400"
-                whileHover={{ scale: 1.1, y: -2 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <Linkedin className="h-5 w-5" />
-              </motion.a>
-            </motion.div>
+          {/* Role line */}
+          <motion.div
+            variants={fadeUp}
+            className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-2"
+          >
+            <span className="font-display text-xl font-medium text-cream-200 md:text-2xl">
+              Computer Science Engineer
+            </span>
+            <span className="text-cream-600">/</span>
+            <span className="text-lg text-cream-500 md:text-xl">
+              {roles.join(' · ')}
+            </span>
           </motion.div>
 
-          {/* Right Side - 3D Glass Card */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            className="relative mx-auto hidden lg:block"
-            style={{
-              perspective: 1000,
-            }}
+          {/* Description */}
+          <motion.p
+            variants={fadeUp}
+            className="mt-8 max-w-xl text-base leading-relaxed text-cream-500 md:text-lg"
           >
-            <motion.div
-              style={{
-                rotateX: cardRotateX,
-                rotateY: cardRotateY,
-                transformStyle: 'preserve-3d',
-              }}
-              className="relative h-96 w-80 rounded-3xl bg-slate-800/50 border border-slate-700/50 p-8 backdrop-blur-sm"
+            Building intelligent systems at the intersection of AI, security,
+            and scalable software engineering.
+          </motion.p>
+
+          {/* CTAs */}
+          <motion.div
+            variants={fadeUp}
+            className="mt-12 flex flex-wrap items-center gap-4"
+          >
+            <MagneticButton
+              onClick={scrollToProjects}
+              className="group inline-flex items-center gap-2 rounded-full bg-accent px-7 py-3.5 text-sm font-medium text-ink-950 transition-colors hover:bg-accent-300"
             >
-              {/* Card Glow Effect */}
-              <div className="absolute -inset-1 rounded-3xl bg-gradient-to-r from-teal-500/10 via-emerald-500/10 to-cyan-500/10 blur-xl opacity-50" />
+              View Projects
+              <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+            </MagneticButton>
 
-              {/* Profile Image Placeholder */}
-              <div className="relative mb-6 flex justify-center">
-                <div className="relative h-32 w-32 overflow-hidden rounded-2xl">
-                  <div className="absolute inset-0 bg-gradient-to-br from-teal-400 to-emerald-500 opacity-80" />
-                  <div className="absolute inset-0 flex items-center justify-center text-4xl font-bold text-white">
-                    SKS
-                  </div>
-                  {/* Glow Ring */}
-                  <motion.div
-                    className="absolute -inset-2 rounded-full border-2 border-teal-400/20"
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 20, repeat: Infinity, ease: 'linear' }}
-                  />
-                </div>
-              </div>
-
-              {/* Info */}
-              <div className="text-center">
-                <h3 className="mb-2 text-xl font-bold text-white">Sowjanya SK Susarla</h3>
-                <p className="text-sm text-slate-400">Computer Science Engineer</p>
-
-                {/* Tech Stack Badges */}
-                <div className="mt-6 flex flex-wrap justify-center gap-2">
-                  {['Python', 'AI/ML', 'React', 'Node.js'].map((tech) => (
-                    <span
-                      key={tech}
-                      className="rounded-full bg-teal-500/10 px-3 py-1 text-xs font-medium text-teal-400"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              </div>
-
-              {/* Floating Icons */}
-              {floatingTechIcons.map((tech, index) => (
-                <motion.div
-                  key={tech.name}
-                  className="absolute h-10 w-10 rounded-xl bg-slate-800/80 border border-slate-700/50 flex items-center justify-center text-xs font-medium text-white"
-                  style={{
-                    left: `${20 + (index % 3) * 30}%`,
-                    top: `${10 + Math.floor(index / 2) * 20}%`,
-                  }}
-                  animate={{
-                    y: [0, -10, 0],
-                    opacity: [0.6, 1, 0.6],
-                  }}
-                  transition={{
-                    duration: 3,
-                    repeat: Infinity,
-                    delay: tech.delay,
-                  }}
-                >
-                  {tech.name.slice(0, 2)}
-                </motion.div>
-              ))}
-            </motion.div>
+            <MagneticButton
+              onClick={scrollToContact}
+              className="inline-flex items-center gap-2 rounded-full border border-ink-600 px-7 py-3.5 text-sm font-medium text-cream-200 transition-colors hover:border-accent hover:text-accent"
+            >
+              Get in touch
+            </MagneticButton>
           </motion.div>
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
 
-      {/* Scroll Indicator */}
+      {/* Scroll indicator */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5 }}
+        transition={{ delay: 1.2, duration: 0.6 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.button
           onClick={scrollToProjects}
-          className="flex flex-col items-center gap-2 text-slate-400 transition-colors hover:text-white"
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
+          className="flex flex-col items-center gap-2 text-cream-600 transition-colors hover:text-accent"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
         >
-          <span className="text-xs font-medium">Scroll to explore</span>
-          <ChevronDown className="h-5 w-5" />
+          <span className="text-[10px] font-medium uppercase tracking-[0.2em]">
+            Scroll
+          </span>
+          <ArrowDown className="h-4 w-4" />
         </motion.button>
       </motion.div>
     </section>

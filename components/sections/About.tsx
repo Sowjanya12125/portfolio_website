@@ -1,189 +1,173 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { useInView } from 'framer-motion';
-import { useRef } from 'react';
-import { MapPin, GraduationCap, Code, Shield, Brain, Coffee } from 'lucide-react';
+import { MapPin } from 'lucide-react';
+import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
 const timelineItems = [
   {
     year: '2026',
     title: 'Present',
-    description: 'Building AI-powered solutions, full-stack applications, and contributing to open source',
-    icon: Brain,
+    description: 'Building AI-powered solutions, full-stack applications, and contributing to open source.',
   },
   {
     year: '2025',
     title: 'Advanced ML & Research',
-    description: 'Bayesian Uncertainty Quantification, Credit Risk Prediction, Autonomous AI Agents',
-    icon: Code,
+    description: 'Bayesian Uncertainty Quantification, Credit Risk Prediction, Autonomous AI Agents.',
   },
   {
     year: '2024',
     title: 'Hackathons & Cybersecurity',
-    description: 'ISRO Hackathon winner, security research, AI projects',
-    icon: Shield,
+    description: 'ISRO Hackathon winner, security research, AI projects.',
   },
   {
     year: '2023',
     title: 'CS Engineering Journey Begins',
-    description: 'Started B.Tech in Computer Science',
-    icon: GraduationCap,
+    description: 'Started B.Tech in Computer Science.',
   },
 ];
 
 const stats = [
-  { label: 'CGPA', value: '8.5+', icon: GraduationCap },
-  { label: 'Projects', value: '15+', icon: Code },
-  { label: 'Hackathons', value: '5+', icon: Shield },
+  { label: 'CGPA', value: '8.5+' },
+  { label: 'Projects', value: '15+' },
+  { label: 'Hackathons', value: '5+' },
+];
+
+const interests = [
+  'Open Source',
+  'Machine Learning',
+  'Cybersecurity Research',
+  'System Design',
+  'Tech Writing',
+  'Problem Solving',
 ];
 
 export default function About() {
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true, margin: '-100px' });
-
   return (
-    <section id="about" className="relative py-24 bg-base-900">
-      {/* Background Gradient */}
-      <div className="absolute inset-0 bg-gradient-glow opacity-30" />
-
-      <div className="section-container relative z-10" ref={ref}>
-        {/* Section Header */}
+    <section id="about" className="relative section-padding bg-ink-950">
+      <div className="mx-auto max-w-7xl">
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={isInView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.6 }}
-          className="mb-16 text-center"
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="grid gap-16 lg:grid-cols-12 lg:gap-12"
         >
-          <span className="mb-4 inline-block rounded-full bg-teal-500/10 px-4 py-1.5 text-sm font-medium text-teal-400">
-            About Me
-          </span>
-          <h2 className="mb-4 font-display text-3xl font-bold text-white sm:text-4xl md:text-5xl">
-            Discovering the Intersection of{' '}
-            <span className="bg-gradient-to-r from-teal-400 via-emerald-400 to-cyan-400 bg-clip-text text-transparent">
-              AI & Engineering
-            </span>
-          </h2>
-          <p className="mx-auto max-w-2xl text-lg text-slate-400">
-            A passionate Computer Science Engineer driven by curiosity and the desire to build impactful solutions.
-          </p>
-        </motion.div>
+          {/* Left column — heading */}
+          <motion.div variants={fadeUp} className="lg:col-span-5">
+            <p className="text-eyebrow mb-6">About</p>
+            <h2 className="text-display text-[clamp(2rem,5vw,3.5rem)] text-cream-100">
+              The intersection of AI &amp; engineering<span className="text-accent">.</span>
+            </h2>
+          </motion.div>
 
-        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* About Card */}
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="rounded-3xl bg-slate-800/50 border border-slate-700/50 p-8"
-          >
-            <div className="mb-6 flex items-center gap-4">
-              <div className="h-12 w-12 rounded-xl bg-teal-500/10 p-2">
-                <Coffee className="h-full w-full text-teal-400" />
-              </div>
-              <h3 className="text-xl font-bold text-white">Who I Am</h3>
-            </div>
+          {/* Right column — content */}
+          <div className="lg:col-span-7">
+            <motion.p
+              variants={fadeUp}
+              className="text-lg leading-relaxed text-cream-400 md:text-xl"
+            >
+              I&apos;m a Computer Science Engineer with a strong foundation in
+              AI/ML, full-stack development, and cybersecurity. My journey in
+              tech began with curiosity about how systems work, leading me to
+              explore everything from low-level security vulnerabilities to
+              high-level AI architectures.
+            </motion.p>
 
-            <p className="mb-6 text-slate-300 leading-relaxed">
-              I'm a Computer Science Engineer with a strong foundation in AI/ML, full-stack development, and cybersecurity.
-              My journey in tech began with curiosity about how systems work, leading me to explore everything from
-              low-level security vulnerabilities to high-level AI architectures.
-            </p>
+            <motion.p
+              variants={fadeUp}
+              className="mt-6 text-base leading-relaxed text-cream-500"
+            >
+              I believe in building solutions that not only solve problems but
+              also push the boundaries of what&apos;s possible. Whether it&apos;s
+              developing an AI assistant, predicting credit risks, or
+              quantifying uncertainty in ML models, I approach every challenge
+              with creativity and precision.
+            </motion.p>
 
-            <p className="mb-8 text-slate-400 leading-relaxed">
-              I believe in building solutions that not only solve problems but also push the boundaries of what's possible.
-              Whether it's developing an AI assistant, predicting credit risks, or quantifying uncertainty in ML models,
-              I approach every challenge with creativity and precision.
-            </p>
-
-            {/* Stats Grid */}
-            <div className="grid grid-cols-3 gap-4">
-              {stats.map((stat, index) => (
-                <motion.div
-                  key={stat.label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={isInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ delay: 0.4 + index * 0.1 }}
-                  className="text-center rounded-2xl bg-slate-900/50 p-4"
-                >
-                  <stat.icon className="mx-auto mb-2 h-5 w-5 text-teal-400" />
-                  <div className="text-2xl font-bold text-white">{stat.value}</div>
-                  <div className="text-sm text-slate-400">{stat.label}</div>
-                </motion.div>
+            {/* Stats */}
+            <motion.div
+              variants={fadeUp}
+              className="mt-12 flex flex-wrap gap-12"
+            >
+              {stats.map((stat) => (
+                <div key={stat.label}>
+                  <div className="text-display text-3xl text-cream-100 md:text-4xl">
+                    {stat.value}
+                  </div>
+                  <div className="mt-1 text-sm text-cream-600">{stat.label}</div>
+                </div>
               ))}
-            </div>
+            </motion.div>
 
             {/* Location */}
-            <div className="mt-6 flex items-center gap-2 text-slate-400">
-              <MapPin className="h-4 w-4 text-teal-400" />
-              <span>India</span>
-            </div>
-          </motion.div>
-
-          {/* Timeline */}
-          <motion.div
-            initial={{ opacity: 0, x: 30 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="relative"
-          >
-            <h3 className="mb-8 text-xl font-bold text-white">My Journey</h3>
-
-            {/* Timeline Line */}
-            <div className="absolute left-4 top-16 bottom-0 w-0.5 bg-gradient-to-b from-teal-400 via-emerald-400 to-transparent" />
-
-            <div className="space-y-8">
-              {timelineItems.map((item, index) => (
-                <motion.div
-                  key={item.year}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={isInView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ delay: 0.5 + index * 0.15 }}
-                  className="relative pl-12"
-                >
-                  {/* Timeline Node */}
-                  <div className="absolute left-0 top-0 h-8 w-8 rounded-full bg-base-900 border-2 border-teal-400 flex items-center justify-center">
-                    <item.icon className="h-4 w-4 text-teal-400" />
-                  </div>
-
-                  {/* Content */}
-                  <div className="rounded-2xl bg-slate-800/50 border border-slate-700/50 p-4 hover-lift">
-                    <div className="mb-1 text-sm font-medium text-teal-400">{item.year}</div>
-                    <h4 className="mb-1 font-semibold text-white">{item.title}</h4>
-                    <p className="text-sm text-slate-400">{item.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* Interests */}
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={isInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ delay: 1 }}
-              className="mt-10 rounded-2xl bg-slate-800/50 border border-slate-700/50 p-6"
+              variants={fadeUp}
+              className="mt-8 flex items-center gap-2 text-sm text-cream-500"
             >
-              <h4 className="mb-4 font-semibold text-white">Interests & Hobbies</h4>
-              <div className="flex flex-wrap gap-2">
-                {[
-                  'Open Source',
-                  'Machine Learning',
-                  'Cybersecurity Research',
-                  'System Design',
-                  'Tech Writing',
-                  'Problem Solving',
-                ].map((interest) => (
-                  <span
-                    key={interest}
-                    className="rounded-full bg-teal-500/10 px-3 py-1.5 text-sm text-teal-400"
-                  >
-                    {interest}
-                  </span>
-                ))}
-              </div>
+              <MapPin className="h-4 w-4 text-accent" />
+              <span>India</span>
             </motion.div>
-          </motion.div>
-        </div>
+          </div>
+        </motion.div>
+
+        {/* Journey timeline */}
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="mt-24 border-t border-ink-700 pt-16"
+        >
+          <motion.h3
+            variants={fadeUp}
+            className="mb-12 text-eyebrow"
+          >
+            Journey
+          </motion.h3>
+
+          <div className="space-y-0">
+            {timelineItems.map((item, index) => (
+              <motion.div
+                key={item.year}
+                variants={fadeUp}
+                className="group grid grid-cols-1 gap-4 border-b border-ink-700 py-8 transition-colors hover:border-cream-600 md:grid-cols-12 md:gap-8"
+              >
+                <div className="md:col-span-2">
+                  <span className="font-display text-2xl font-bold text-cream-600 transition-colors group-hover:text-accent md:text-3xl">
+                    {item.year}
+                  </span>
+                </div>
+                <div className="md:col-span-4">
+                  <h4 className="text-lg font-semibold text-cream-200">
+                    {item.title}
+                  </h4>
+                </div>
+                <div className="md:col-span-6">
+                  <p className="text-sm text-cream-500">{item.description}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Interests */}
+        <motion.div
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={viewportOnce}
+          className="mt-16 flex flex-wrap gap-3"
+        >
+          {interests.map((interest) => (
+            <span
+              key={interest}
+              className="rounded-full border border-ink-600 px-4 py-2 text-sm text-cream-500 transition-colors hover:border-accent hover:text-accent"
+            >
+              {interest}
+            </span>
+          ))}
+        </motion.div>
       </div>
     </section>
   );

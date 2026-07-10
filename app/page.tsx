@@ -7,19 +7,30 @@ import Projects from '@/components/sections/Projects';
 import Achievements from '@/components/sections/Achievements';
 import Contact from '@/components/sections/Contact';
 import Footer from '@/components/sections/Footer';
+import Marquee from '@/components/Marquee';
+
+const marqueeItems = [
+  'Available for opportunities',
+  'AI Developer',
+  'Full Stack Developer',
+  'ML Researcher',
+  'Cybersecurity Enthusiast',
+  'Open Source Contributor',
+];
 
 export default function Home() {
   return (
-    <main className="relative min-h-screen bg-base-950">
+    <main className="relative min-h-screen bg-ink-950">
       {/* Navigation */}
       <Navigation />
 
       {/* Sections */}
       <Hero />
       <About />
-      <Skills />
       <Experience />
+      <Marquee items={marqueeItems} speed={45} />
       <Projects />
+      <Skills />
       <Achievements />
       <Contact />
 

@@ -37,7 +37,7 @@ export default function Marquee({ items, speed = 40, reverse = false }: MarqueeP
             <span className="font-display text-3xl font-bold uppercase tracking-tight text-cream-200 transition-colors group-hover:text-cream-500 md:text-5xl">
               {item}
             </span>
-            <span className="text-3xl text-accent md:text-5xl">&#x2731;</span>
+            <span className="text-3xl text-accent md:text-5xl">✱</span>
           </div>
         ))}
       </motion.div>

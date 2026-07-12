@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion';
+import { motion, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
@@ -290,11 +290,9 @@ export default function Projects() {
 
       {/* Project rows */}
       <div>
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map((project, index) => (
-            <ProjectRow key={project.id} project={project} index={index} />
-          ))}
-        </AnimatePresence>
+        {filteredProjects.map((project, index) => (
+          <ProjectRow key={project.id} project={project} index={index} />
+        ))}
       </div>
 
       <motion.div

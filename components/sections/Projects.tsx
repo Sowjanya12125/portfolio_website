@@ -36,7 +36,6 @@ const projects: Project[] = [
     technologies: ['React', 'Node.js', 'MongoDB', 'TypeScript'],
     category: 'Full Stack',
     githubUrl: 'https://github.com/Sowjanya12125/expenseflow',
-    liveUrl: '#',
     featured: true,
   },
   {
@@ -120,7 +119,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
       />
 
       {/* Static thumbnail — visible always, scales on hover */}
-      <div className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 overflow-hidden rounded-xl border border-ink-600 transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 md:block lg:right-12">
+      <div className="pointer-events-none absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 overflow-hidden rounded-xl border border-ink-600 transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 md:block lg:right-12">
         <div className="relative h-[160px] w-[260px]">
           <img
             src={project.image}
@@ -137,7 +136,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         </div>
       </div>
 
-      <div className="relative block py-10 md:py-14">
+      <div className="relative z-10 block py-10 md:py-14">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 md:px-12">
           {/* Left: index + title */}
           <div className="flex items-baseline gap-6 md:gap-12">
@@ -218,7 +217,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
 
         {/* Hover background overlay */}
         <motion.div
-          className="absolute inset-0 bg-ink-900 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 bg-ink-900 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
         />
       </div>
     </motion.div>

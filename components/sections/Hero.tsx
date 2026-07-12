@@ -13,8 +13,7 @@ const roles = [
   'Cybersecurity Enthusiast',
 ];
 
-const HERO_IMAGE =
-  'https://images.pexels.com/photos/8849295/pexels-photo-8849295.jpeg?auto=compress&cs=tinysrgb&w=1200';
+const HERO_IMAGE = '/images/WhatsApp_Image_2026-07-06_at_11.23.59_AM copy.jpeg';
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);

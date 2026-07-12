@@ -18,7 +18,7 @@ const timelineItems = [
   {
     year: '2024',
     title: 'Hackathons & Cybersecurity',
-    description: 'ISRO Hackathon winner, security research, AI projects.',
+    description: 'ISRO Hackathon Round 2, security research, AI projects.',
   },
   {
     year: '2023',

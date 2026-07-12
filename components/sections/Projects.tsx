@@ -1,7 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
-import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, AnimatePresence, useSpring, useTransform } from 'framer-motion';
 import { ArrowUpRight, Github, ExternalLink } from 'lucide-react';
 import { fadeUp, staggerContainer, viewportOnce } from '@/lib/motion';
 
@@ -73,7 +73,7 @@ const projects: Project[] = [
     id: 'security-scanner',
     title: 'Network Security Scanner',
     description: 'Automated vulnerability detection and reporting system with CVE database integration and custom scan profiles.',
-    image: 'https://images.pexels.com/photos/60504/security-hacker-computer-network-60504.jpeg?auto=compress&cs=tinysrgb&w=800',
+    image: 'https://images.pexels.com/photos/6078253/pexels-photo-6078253.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['Python', 'Nmap', 'Docker', 'React'],
     category: 'Cybersecurity',
     githubUrl: 'https://github.com/Sowjanya12125/security-scanner',
@@ -87,17 +87,6 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  const mouseX = useMotionValue(0);
-  const mouseY = useMotionValue(0);
-
-  const springConfig = { damping: 25, stiffness: 250, mass: 0.5 };
-  const x = useSpring(mouseX, springConfig);
-  const y = useSpring(mouseY, springConfig);
-
-  // Parallax tilt for the image
-  const rotateX = useTransform(y, [0, 400], [5, -5]);
-  const rotateY = useTransform(x, [0, 1000], [-5, 5]);
-
   // Progress bar across the row
   const progressX = useSpring(0, { damping: 30, stiffness: 200 });
   const progressWidth = useTransform(progressX, (v) => `${v}%`);
@@ -106,9 +95,6 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
     if (!rowRef.current) return;
     const rect = rowRef.current.getBoundingClientRect();
     const relX = e.clientX - rect.left;
-    const relY = e.clientY - rect.top;
-    mouseX.set(relX);
-    mouseY.set(relY);
     progressX.set((relX / rect.width) * 100);
   };
 
@@ -133,38 +119,23 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
         style={{ width: progressWidth }}
       />
 
-      {/* Hover preview image — follows cursor with parallax tilt */}
-      {isHovered && (
-        <motion.div
-          className="pointer-events-none absolute z-20 hidden h-[280px] w-[400px] overflow-hidden rounded-xl md:block"
-          style={{
-            x,
-            y,
-            translateX: '-50%',
-            translateY: '-50%',
-            rotateX,
-            rotateY,
-            transformPerspective: 1000,
-          }}
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          exit={{ opacity: 0, scale: 0.9 }}
-          transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-        >
+      {/* Static thumbnail — visible always, scales on hover */}
+      <div className="absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 overflow-hidden rounded-xl border border-ink-600 transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 md:block lg:right-12">
+        <div className="relative h-[160px] w-[260px]">
           <img
             src={project.image}
             alt={project.title}
             className="h-full w-full object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/20 to-transparent" />
           {project.featured && (
             <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-950">
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-950" />
               Featured
             </div>
           )}
-        </motion.div>
-      )}
+        </div>
+      </div>
 
       <div className="relative block py-10 md:py-14">
         <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 md:px-12">
@@ -201,15 +172,8 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
                 ))}
               </div>
 
-              {/* Action links — appear on hover */}
-              <motion.div
-                className="mt-5 flex items-center gap-4 overflow-hidden"
-                animate={{
-                  opacity: isHovered ? 1 : 0,
-                  height: isHovered ? 'auto' : 0,
-                }}
-                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              >
+              {/* Action links — always visible */}
+              <div className="mt-5 flex items-center gap-4">
                 {project.githubUrl && (
                   <a
                     href={project.githubUrl}
@@ -232,7 +196,7 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
                     Live Demo
                   </a>
                 )}
-              </motion.div>
+              </div>
             </div>
           </div>
 

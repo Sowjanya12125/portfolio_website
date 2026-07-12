@@ -34,10 +34,10 @@ export default function Marquee({ items, speed = 40, reverse = false }: MarqueeP
       >
         {doubled.map((item, i) => (
           <div key={i} className="flex items-center gap-8">
-            <span className="font-display text-3xl font-bold uppercase tracking-tight text-cream-200 transition-colors group-hover:text-cream-500 md:text-5xl">
+            <span className="font-display text-xl font-bold uppercase tracking-tight text-cream-200 transition-colors group-hover:text-cream-500 md:text-2xl">
               {item}
             </span>
-            <span className="text-3xl text-accent md:text-5xl">✱</span>
+            <span className="text-xl text-accent md:text-2xl">✱</span>
           </div>
         ))}
       </motion.div>

@@ -12,6 +12,7 @@ interface ExperienceItem {
   contributions: string[];
   technologies: string[];
   type: string;
+  image: string;
 }
 
 const experiences: ExperienceItem[] = [
@@ -21,6 +22,7 @@ const experiences: ExperienceItem[] = [
     duration: '2024 — Present',
     location: 'Remote',
     type: 'Research',
+    image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=600',
     contributions: [
       'Developed Bayesian Uncertainty Quantification models for ML systems',
       'Implemented probabilistic inference algorithms for risk prediction',
@@ -29,15 +31,16 @@ const experiences: ExperienceItem[] = [
     technologies: ['Python', 'PyTorch', 'TensorFlow', 'Scikit-learn'],
   },
   {
-    company: 'ISRO Hackathon',
+    company: 'ISRO — Bharatiya Antariksh Hackathon',
     role: 'Team Lead & Developer',
-    duration: '2024',
-    location: 'India',
+    duration: 'Jul 2025',
+    location: 'India (National)',
     type: 'Hackathon',
+    image: 'https://images.pexels.com/photos/73851/space-moon-earth-planet-73851.jpeg?auto=compress&cs=tinysrgb&w=600',
     contributions: [
-      'Led a team of 4 members to develop innovative space-tech solutions',
-      'Won the national-level hackathon organized by ISRO',
-      'Built real-time data processing pipeline for satellite imagery',
+      'Advanced to Round 2 among hundreds of nationwide teams',
+      'Built high-complexity data processing algorithms for large-scale satellite and aerospace datasets',
+      'Presented solutions directly to ISRO evaluators',
     ],
     technologies: ['Python', 'OpenCV', 'TensorFlow', 'Cloud Services'],
   },
@@ -47,6 +50,7 @@ const experiences: ExperienceItem[] = [
     duration: '2023 — Present',
     location: 'India',
     type: 'Projects',
+    image: 'https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=600',
     contributions: [
       'Built Jarvis AI Assistant with natural language understanding',
       'Developed Credit Risk Prediction system using ML',
@@ -71,7 +75,7 @@ export default function Experience() {
           </motion.p>
           <motion.h2
             variants={fadeUp}
-            className="text-display text-[clamp(2.5rem,7vw,5rem)] text-cream-100"
+            className="text-display text-[clamp(2rem,5vw,3.5rem)] text-cream-100"
           >
             Professional journey<span className="text-accent">.</span>
           </motion.h2>
@@ -88,8 +92,16 @@ export default function Experience() {
               viewport={viewportOnce}
               className="group grid grid-cols-1 gap-6 border-b border-ink-700 py-10 transition-colors hover:border-cream-600 md:grid-cols-12 md:gap-8"
             >
-              {/* Left: meta */}
+              {/* Left: image + meta */}
               <div className="md:col-span-3">
+                <div className="relative mb-4 h-28 overflow-hidden rounded-lg border border-ink-700">
+                  <img
+                    src={exp.image}
+                    alt={exp.company}
+                    className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-transparent" />
+                </div>
                 <span className="text-sm text-cream-600">{exp.duration}</span>
                 <div className="mt-1 inline-block rounded-full border border-ink-600 px-3 py-1 text-xs text-cream-500">
                   {exp.type}

@@ -13,6 +13,9 @@ const roles = [
   'Cybersecurity Enthusiast',
 ];
 
+const HERO_IMAGE =
+  'https://images.pexels.com/photos/8849295/pexels-photo-8849295.jpeg?auto=compress&cs=tinysrgb&w=1200';
+
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -23,6 +26,9 @@ export default function Hero() {
   const y = useTransform(scrollYProgress, [0, 1], [0, 200]);
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
+
+  // Parallax for hero image — moves slower than scroll
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, 120]);
 
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -48,6 +54,56 @@ export default function Hero() {
 
       {/* Faint accent glow */}
       <div className="absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-accent/[0.04] blur-[120px] pointer-events-none" />
+
+      {/* Hero image — right side, futuristic */}
+      <motion.div
+        style={{ y: imageY }}
+        className="absolute right-0 top-0 z-[5] hidden h-full w-[45%] lg:block"
+      >
+        <div className="relative flex h-full items-center justify-center pr-12">
+          {/* Pulsing glow behind image */}
+          <motion.div
+            className="absolute h-[420px] w-[420px] rounded-full bg-accent/[0.08] blur-[80px]"
+            animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.08, 1] }}
+            transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+          />
+
+          {/* Image with fade+scale in, then continuous float */}
+          <motion.div
+            className="relative overflow-hidden rounded-2xl"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {/* Continuous float */}
+            <motion.div
+              animate={{ y: [0, -10, 0] }}
+              transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+              className="relative"
+            >
+              <img
+                src={HERO_IMAGE}
+                alt="Futuristic abstract technology visualization"
+                className="h-[380px] w-[520px] object-cover"
+                draggable={false}
+              />
+              {/* Gradient overlay for blend */}
+              <div className="absolute inset-0 bg-gradient-to-r from-ink-950/60 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/40 to-transparent" />
+            </motion.div>
+
+            {/* Pulsing glow on image edges */}
+            <motion.div
+              className="absolute inset-0 rounded-2xl"
+              style={{
+                boxShadow: '0 0 60px 0 rgba(224, 122, 95, 0.15)',
+              }}
+              animate={{ opacity: [0.3, 0.6, 0.3] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            />
+          </motion.div>
+        </div>
+      </motion.div>
 
       <motion.div
         style={{ y, opacity, scale }}

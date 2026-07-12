@@ -13,6 +13,7 @@ interface ExperienceItem {
   technologies: string[];
   type: string;
   image: string;
+  placeholder?: boolean;
 }
 
 const experiences: ExperienceItem[] = [
@@ -43,6 +44,7 @@ const experiences: ExperienceItem[] = [
       'Presented solutions directly to ISRO evaluators',
     ],
     technologies: ['Python', 'OpenCV', 'TensorFlow', 'Cloud Services'],
+    placeholder: true,
   },
   {
     company: 'University Projects',
@@ -101,6 +103,11 @@ export default function Experience() {
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-ink-900/80 to-transparent" />
+                  {exp.placeholder && (
+                    <div className="absolute bottom-2 left-2 rounded-full bg-ink-950/80 px-2 py-0.5 text-[9px] font-medium uppercase tracking-wider text-cream-500">
+                      Placeholder
+                    </div>
+                  )}
                 </div>
                 <span className="text-sm text-cream-600">{exp.duration}</span>
                 <div className="mt-1 inline-block rounded-full border border-ink-600 px-3 py-1 text-xs text-cream-500">

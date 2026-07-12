@@ -83,7 +83,8 @@ export default function Hero() {
               <img
                 src={HERO_IMAGE}
                 alt="Futuristic abstract technology visualization"
-                className="h-[380px] w-[520px] object-cover"
+                className="h-[420px] w-[520px] object-cover"
+                style={{ objectPosition: 'center 20%' }}
                 draggable={false}
               />
               {/* Gradient overlay for blend */}

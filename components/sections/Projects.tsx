@@ -21,8 +21,10 @@ const projects: Project[] = [
   {
     id: 'jarvis',
     title: 'Jarvis AI Assistant',
-    description: 'Intelligent voice-controlled AI assistant with natural language understanding, task automation, and multi-service integration.',
-    image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
+    description:
+      'Intelligent voice-controlled AI assistant with natural language understanding, task automation, and multi-service integration.',
+    image:
+      'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['Python', 'TensorFlow', 'NLP', 'FastAPI'],
     category: 'AI/ML',
     githubUrl: 'https://github.com/Sowjanya12125/jarvis',
@@ -31,8 +33,10 @@ const projects: Project[] = [
   {
     id: 'expenseflow',
     title: 'ExpenseFlow',
-    description: 'Full-stack expense management application with real-time analytics, intelligent categorization, and budget planning.',
-    image: 'https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=compress&cs=tinysrgb&w=800',
+    description:
+      'Full-stack expense management application with real-time analytics, intelligent categorization, and budget planning.',
+    image:
+      'https://images.pexels.com/photos/6694543/pexels-photo-6694543.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['React', 'Node.js', 'MongoDB', 'TypeScript'],
     category: 'Full Stack',
     githubUrl: 'https://github.com/Sowjanya12125/expenseflow',
@@ -41,8 +45,10 @@ const projects: Project[] = [
   {
     id: 'credit-risk',
     title: 'Credit Risk Prediction',
-    description: 'ML-powered credit risk assessment system with high accuracy, feature importance analysis, and model explainability.',
-    image: 'https://images.pexels.com/photos/590020/pexels-photo-590020.jpeg?auto=compress&cs=tinysrgb&w=800',
+    description:
+      'ML-powered credit risk assessment system with high accuracy, feature importance analysis, and model explainability.',
+    image:
+      'https://images.pexels.com/photos/590020/pexels-photo-590020.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['Python', 'Scikit-learn', 'XGBoost', 'Streamlit'],
     category: 'AI/ML',
     githubUrl: 'https://github.com/Sowjanya12125/credit-risk',
@@ -51,8 +57,10 @@ const projects: Project[] = [
   {
     id: 'bayesian-ml',
     title: 'Bayesian Uncertainty Quantification',
-    description: 'Advanced research implementing Bayesian methods for uncertainty quantification in deep neural networks.',
-    image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
+    description:
+      'Advanced research implementing Bayesian methods for uncertainty quantification in deep neural networks.',
+    image:
+      'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['Python', 'PyTorch', 'NumPy', 'Matplotlib'],
     category: 'Research',
     githubUrl: 'https://github.com/Sowjanya12125/bayesian-ml',
@@ -61,8 +69,10 @@ const projects: Project[] = [
   {
     id: 'autonomous-agent',
     title: 'Autonomous AI Agent',
-    description: 'Self-improving AI agent capable of learning, planning, and executing complex multi-step tasks autonomously.',
-    image: 'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
+    description:
+      'Self-improving AI agent capable of learning, planning, and executing complex multi-step tasks autonomously.',
+    image:
+      'https://images.pexels.com/photos/8386440/pexels-photo-8386440.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['Python', 'LangChain', 'OpenAI', 'Pinecone'],
     category: 'AI/ML',
     githubUrl: 'https://github.com/Sowjanya12125/autonomous-agent',
@@ -71,8 +81,10 @@ const projects: Project[] = [
   {
     id: 'security-scanner',
     title: 'Network Security Scanner',
-    description: 'Automated vulnerability detection and reporting system with CVE database integration and custom scan profiles.',
-    image: 'https://images.pexels.com/photos/6078253/pexels-photo-6078253.jpeg?auto=compress&cs=tinysrgb&w=800',
+    description:
+      'Automated vulnerability detection and reporting system with CVE database integration and custom scan profiles.',
+    image:
+      'https://images.pexels.com/photos/5380592/pexels-photo-5380592.jpeg?auto=compress&cs=tinysrgb&w=800',
     technologies: ['Python', 'Nmap', 'Docker', 'React'],
     category: 'Cybersecurity',
     githubUrl: 'https://github.com/Sowjanya12125/security-scanner',
@@ -86,7 +98,6 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
   const rowRef = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
 
-  // Progress bar across the row
   const progressX = useSpring(0, { damping: 30, stiffness: 200 });
   const progressWidth = useTransform(progressX, (v) => `${v}%`);
 
@@ -114,111 +125,102 @@ function ProjectRow({ project, index }: { project: Project; index: number }) {
     >
       {/* Hover progress bar at top of row */}
       <motion.div
-        className="absolute left-0 top-0 z-30 h-px bg-accent"
+        className="pointer-events-none absolute left-0 top-0 z-30 h-px bg-accent"
         style={{ width: progressWidth }}
       />
 
-      {/* Static thumbnail — visible always, scales on hover */}
-      <div className="pointer-events-none absolute right-6 top-1/2 z-20 hidden -translate-y-1/2 overflow-hidden rounded-xl border border-ink-600 transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 md:block lg:right-12">
-        <div className="relative h-[160px] w-[260px]">
-          <img
-            src={project.image}
-            alt={project.title}
-            className="h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/20 to-transparent" />
-          {project.featured && (
-            <div className="absolute left-3 top-3 flex items-center gap-1.5 rounded-full bg-accent/90 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-ink-950">
-              <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-ink-950" />
-              Featured
+      {/* Hover background — behind content, never blocks clicks */}
+      <div className="pointer-events-none absolute inset-0 bg-ink-900 opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      <div className="relative z-10 mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 py-10 md:px-12 md:py-14">
+        {/* Left: index + title + links */}
+        <div className="flex items-baseline gap-6 md:gap-12">
+          <motion.span
+            className="text-sm font-medium tabular-nums"
+            animate={{
+              color: isHovered ? '#e07a5f' : '#7a746a',
+              scale: isHovered ? 1.15 : 1,
+            }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+          >
+            {String(index + 1).padStart(2, '0')}
+          </motion.span>
+
+          <div>
+            <h3 className="text-display text-2xl text-cream-200 transition-all duration-300 group-hover:translate-x-2 group-hover:text-accent md:text-4xl lg:text-5xl">
+              {project.title}
+            </h3>
+            <p className="mt-2 max-w-xl text-sm text-cream-500 transition-opacity duration-300 group-hover:text-cream-400 md:text-base">
+              {project.description}
+            </p>
+            {/* Tech tags */}
+            <div className="mt-4 flex flex-wrap gap-2">
+              {project.technologies.map((tech) => (
+                <span
+                  key={tech}
+                  className="rounded-full border border-ink-600 px-3 py-1 text-xs text-cream-500 transition-colors duration-300 group-hover:border-ink-500 group-hover:text-cream-400"
+                >
+                  {tech}
+                </span>
+              ))}
             </div>
-          )}
-        </div>
-      </div>
 
-      <div className="relative z-10 block py-10 md:py-14">
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-6 md:px-12">
-          {/* Left: index + title */}
-          <div className="flex items-baseline gap-6 md:gap-12">
-            {/* Animated index number */}
-            <motion.span
-              className="text-sm font-medium tabular-nums"
-              animate={{
-                color: isHovered ? '#e07a5f' : '#7a746a',
-                scale: isHovered ? 1.15 : 1,
-              }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            >
-              {String(index + 1).padStart(2, '0')}
-            </motion.span>
-
-            <div>
-              <h3 className="text-display text-2xl text-cream-200 transition-all duration-300 group-hover:translate-x-2 group-hover:text-accent md:text-4xl lg:text-5xl">
-                {project.title}
-              </h3>
-              <p className="mt-2 max-w-xl text-sm text-cream-500 transition-opacity duration-300 group-hover:text-cream-400 md:text-base">
-                {project.description}
-              </p>
-              {/* Tech tags */}
-              <div className="mt-4 flex flex-wrap gap-2">
-                {project.technologies.map((tech) => (
-                  <span
-                    key={tech}
-                    className="rounded-full border border-ink-600 px-3 py-1 text-xs text-cream-500 transition-colors duration-300 group-hover:border-ink-500 group-hover:text-cream-400"
-                  >
-                    {tech}
-                  </span>
-                ))}
-              </div>
-
-              {/* Action links — always visible */}
-              <div className="mt-5 flex items-center gap-4">
-                {project.githubUrl && (
-                  <a
-                    href={project.githubUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-cream-400 transition-colors hover:text-accent"
-                  >
-                    <Github className="h-3.5 w-3.5" />
-                    Source
-                  </a>
-                )}
-                {project.liveUrl && (
-                  <a
-                    href={project.liveUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 text-xs font-medium text-cream-400 transition-colors hover:text-accent"
-                  >
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    Live Demo
-                  </a>
-                )}
-              </div>
+            {/* Action links — always visible and clickable */}
+            <div className="mt-5 flex items-center gap-4">
+              {project.githubUrl && (
+                <a
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative z-20 inline-flex items-center gap-1.5 text-xs font-medium text-cream-400 transition-colors hover:text-accent"
+                >
+                  <Github className="h-4 w-4" />
+                  Source Code
+                </a>
+              )}
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative z-20 inline-flex items-center gap-1.5 text-xs font-medium text-cream-400 transition-colors hover:text-accent"
+                >
+                  <ExternalLink className="h-4 w-4" />
+                  Live Demo
+                </a>
+              )}
             </div>
-          </div>
-
-          {/* Right: category + arrow */}
-          <div className="flex flex-shrink-0 flex-col items-end gap-3">
-            <span className="text-eyebrow">{project.category}</span>
-            <motion.div
-              animate={{
-                rotate: isHovered ? 45 : 0,
-                scale: isHovered ? 1.2 : 1,
-              }}
-              transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="flex h-12 w-12 items-center justify-center rounded-full border border-ink-600 text-cream-400 transition-colors group-hover:border-accent group-hover:text-accent"
-            >
-              <ArrowUpRight className="h-5 w-5" />
-            </motion.div>
           </div>
         </div>
 
-        {/* Hover background overlay */}
-        <motion.div
-          className="pointer-events-none absolute inset-0 bg-ink-900 opacity-0 transition-opacity duration-500 group-hover:opacity-100"
-        />
+        {/* Right: thumbnail + category + arrow */}
+        <div className="flex flex-shrink-0 flex-col items-end gap-3">
+          <span className="text-eyebrow">{project.category}</span>
+          {/* Thumbnail */}
+          <div className="relative h-20 w-28 overflow-hidden rounded-lg border border-ink-600 transition-all duration-500 group-hover:scale-105 group-hover:border-accent/50 md:h-24 md:w-36">
+            <img
+              src={project.image}
+              alt={project.title}
+              className="h-full w-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-ink-950/80 via-ink-950/20 to-transparent" />
+            {project.featured && (
+              <div className="absolute left-2 top-2 flex items-center gap-1 rounded-full bg-accent/90 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-ink-950">
+                Featured
+              </div>
+            )}
+          </div>
+          <motion.div
+            animate={{
+              rotate: isHovered ? 45 : 0,
+              scale: isHovered ? 1.2 : 1,
+            }}
+            transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+            className="flex h-12 w-12 items-center justify-center rounded-full border border-ink-600 text-cream-400 transition-colors group-hover:border-accent group-hover:text-accent"
+          >
+            <ArrowUpRight className="h-5 w-5" />
+          </motion.div>
+        </div>
       </div>
     </motion.div>
   );
@@ -255,8 +257,8 @@ export default function Projects() {
           variants={fadeUp}
           className="mt-6 max-w-xl text-base text-cream-500 md:text-lg"
         >
-          A selection of work spanning AI, full-stack engineering, and
-          security research.
+          A selection of work spanning AI, full-stack engineering, and security
+          research.
         </motion.p>
 
         {/* Category filters */}
@@ -277,7 +279,6 @@ export default function Projects() {
               {category}
               {activeCategory === category && (
                 <motion.span
-                  layoutId="activeFilter"
                   className="absolute inset-0 -z-10 rounded-full bg-accent/10"
                   transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                 />
@@ -288,15 +289,14 @@ export default function Projects() {
       </motion.div>
 
       {/* Project rows */}
-      <motion.div layout>
+      <div>
         <AnimatePresence mode="popLayout">
           {filteredProjects.map((project, index) => (
             <ProjectRow key={project.id} project={project} index={index} />
           ))}
         </AnimatePresence>
-      </motion.div>
+      </div>
 
-      {/* Footer link */}
       <motion.div
         variants={fadeUp}
         initial="hidden"

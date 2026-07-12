@@ -110,8 +110,8 @@ This project is open for viewing and personal reference. Please reach out if you
 
 - **Live Portfolio:** [premium-portfolio-we-hoq3.bolt.host](https://premium-portfolio-we-hoq3.bolt.host/)
 - **GitHub:** [@Sowjanya12125](https://github.com/Sowjanya12125)
-- **Email:** *(add your email here)*
-- **LinkedIn:** *(add your LinkedIn here)*
+- **Email:** *(kameshwarisowjanya@gmail.com)*
+- **LinkedIn:** *(https://www.linkedin.com/in/sowjanya-s-k-susarla-498632308/)*
 
 ---
 

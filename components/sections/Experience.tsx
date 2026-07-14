@@ -37,14 +37,13 @@ const experiences: ExperienceItem[] = [
     duration: 'Jul 2025',
     location: 'India (National)',
     type: 'Hackathon',
-    image: 'https://images.pexels.com/photos/73851/space-moon-earth-planet-73851.jpeg?auto=compress&cs=tinysrgb&w=600',
+    image: 'https://images.pexels.com/photos/3184360/pexels-photo-3184360.jpeg?auto=compress&cs=tinysrgb&w=600',
     contributions: [
       'Advanced to Round 2 among hundreds of nationwide teams',
       'Built high-complexity data processing algorithms for large-scale satellite and aerospace datasets',
       'Presented solutions directly to ISRO evaluators',
     ],
     technologies: ['Python', 'OpenCV', 'TensorFlow', 'Cloud Services'],
-    placeholder: true,
   },
   {
     company: 'University Projects',

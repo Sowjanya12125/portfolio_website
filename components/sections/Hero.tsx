@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ArrowDown, FileDown } from 'lucide-react';
 import MagneticButton from '@/components/MagneticButton';
@@ -15,6 +15,47 @@ const roles = [
 
 const HERO_IMAGE = '/images/WhatsApp_Image_2026-07-06_at_11.23.59_AM copy.jpeg';
 
+function useTypewriter(words: string[], opts?: { typeSpeed?: number; deleteSpeed?: number; pause?: number }) {
+  const typeSpeed = opts?.typeSpeed ?? 90;
+  const deleteSpeed = opts?.deleteSpeed ?? 45;
+  const pause = opts?.pause ?? 1600;
+
+  const [text, setText] = useState('');
+  const [wordIndex, setWordIndex] = useState(0);
+  const [phase, setPhase] = useState<'typing' | 'pausing' | 'deleting'>('typing');
+
+  useEffect(() => {
+    const fullWord = words[wordIndex];
+
+    if (phase === 'typing') {
+      if (text.length < fullWord.length) {
+        const t = setTimeout(() => setText(fullWord.slice(0, text.length + 1)), typeSpeed);
+        return () => clearTimeout(t);
+      }
+      const t = setTimeout(() => setPhase('pausing'), pause);
+      return () => clearTimeout(t);
+    }
+
+    if (phase === 'pausing') {
+      const t = setTimeout(() => setPhase('deleting'), pause);
+      return () => clearTimeout(t);
+    }
+
+    // deleting
+    if (text.length > 0) {
+      const t = setTimeout(() => setText(fullWord.slice(0, text.length - 1)), deleteSpeed);
+      return () => clearTimeout(t);
+    }
+    const t = setTimeout(() => {
+      setWordIndex((i) => (i + 1) % words.length);
+      setPhase('typing');
+    }, 300);
+    return () => clearTimeout(t);
+  }, [text, phase, wordIndex, words, typeSpeed, deleteSpeed, pause]);
+
+  return text;
+}
+
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const { scrollYProgress } = useScroll({
@@ -26,8 +67,9 @@ export default function Hero() {
   const opacity = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, 0.95]);
 
-  // Parallax for hero image — moves slower than scroll
   const imageY = useTransform(scrollYProgress, [0, 1], [0, 120]);
+
+  const typed = useTypewriter(roles);
 
   const scrollToProjects = () => {
     document.getElementById('projects')?.scrollIntoView({ behavior: 'smooth' });
@@ -54,22 +96,22 @@ export default function Hero() {
       {/* Faint accent glow */}
       <div className="absolute left-1/2 top-1/3 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-accent/[0.04] blur-[120px] pointer-events-none" />
 
-      {/* Hero image — right side, futuristic */}
+      {/* Hero image — right side, smaller, background removed via mix-blend + mask */}
       <motion.div
         style={{ y: imageY }}
-        className="absolute right-0 top-0 z-[5] hidden h-full w-[45%] lg:block"
+        className="absolute right-0 top-0 z-[5] hidden h-full w-[40%] lg:block"
       >
         <div className="relative flex h-full items-center justify-center pr-12">
           {/* Pulsing glow behind image */}
           <motion.div
-            className="absolute h-[420px] w-[420px] rounded-full bg-accent/[0.08] blur-[80px]"
+            className="absolute h-[320px] w-[320px] rounded-full bg-accent/[0.08] blur-[80px]"
             animate={{ opacity: [0.4, 0.7, 0.4], scale: [1, 1.08, 1] }}
             transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
           />
 
           {/* Image with fade+scale in, then continuous float */}
           <motion.div
-            className="relative overflow-hidden rounded-2xl"
+            className="relative"
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
@@ -79,27 +121,25 @@ export default function Hero() {
               animate={{ y: [0, -10, 0] }}
               transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
               className="relative"
+              style={{
+                maskImage: 'radial-gradient(ellipse 75% 80% at 50% 45%, black 55%, transparent 92%)',
+                WebkitMaskImage: 'radial-gradient(ellipse 75% 80% at 50% 45%, black 55%, transparent 92%)',
+              }}
             >
               <img
                 src={HERO_IMAGE}
-                alt="Futuristic abstract technology visualization"
-                className="h-[420px] w-[520px] object-cover"
-                style={{ objectPosition: 'center 20%' }}
+                alt="Sowjanya SK Susarla"
+                className="h-[340px] w-[280px] rounded-full object-cover"
+                style={{ objectPosition: 'center 15%' }}
                 draggable={false}
               />
-              {/* Gradient overlay for blend */}
-              <div className="absolute inset-0 bg-gradient-to-r from-ink-950/60 via-transparent to-transparent" />
-              <div className="absolute inset-0 bg-gradient-to-t from-ink-950/40 to-transparent" />
             </motion.div>
 
-            {/* Pulsing glow on image edges */}
+            {/* Decorative ring around image */}
             <motion.div
-              className="absolute inset-0 rounded-2xl"
-              style={{
-                boxShadow: '0 0 60px 0 rgba(224, 122, 95, 0.15)',
-              }}
-              animate={{ opacity: [0.3, 0.6, 0.3] }}
-              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+              className="pointer-events-none absolute left-1/2 top-1/2 h-[360px] w-[300px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/20"
+              animate={{ rotate: 360 }}
+              transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
             />
           </motion.div>
         </div>
@@ -135,7 +175,7 @@ export default function Hero() {
             </span>
           </motion.h1>
 
-          {/* Role line */}
+          {/* Role line — animated typewriter */}
           <motion.div
             variants={fadeUp}
             className="mt-8 flex flex-wrap items-baseline gap-x-3 gap-y-2"
@@ -144,8 +184,13 @@ export default function Hero() {
               Computer Science Engineer
             </span>
             <span className="text-cream-600">/</span>
-            <span className="text-lg text-cream-500 md:text-xl">
-              {roles.join(' · ')}
+            <span className="inline-flex items-center text-lg font-medium text-accent md:text-xl">
+              <span>{typed}</span>
+              <motion.span
+                className="ml-0.5 inline-block h-[1.1em] w-[2px] bg-accent"
+                animate={{ opacity: [1, 0, 1] }}
+                transition={{ duration: 0.7, repeat: Infinity, ease: 'easeInOut' }}
+              />
             </span>
           </motion.div>
 
